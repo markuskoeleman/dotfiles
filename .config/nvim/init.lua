@@ -776,6 +776,7 @@ require("lazy").setup({
 
 			vim.lsp.enable("rust_analyzer")
 			vim.lsp.enable("zls")
+			vim.lsp.enable("pyright")
 		end,
 	},
 
