@@ -19,11 +19,10 @@
         // "power-profiles-daemon",
         "cpu",
         "memory",
-        "temperature",
         "backlight",
         "keyboard-state",
         "battery",
-	"bluetooth",
+        "bluetooth",
         "tray",
 	"custom/power"
     ],

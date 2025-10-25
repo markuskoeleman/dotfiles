@@ -14,6 +14,9 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
+# aliasses
+alias ls='ls --color=auto'
+
 
 # Shell integrations
 eval "$(fzf --zsh)"
