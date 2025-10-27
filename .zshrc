@@ -14,9 +14,12 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
+# PATH
+export PATH="$HOME/.local/bin:$PATH"
+
 # aliasses
 alias ls='ls --color=auto'
-
+alias op='open_pdf.sh'
 
 # Shell integrations
 eval "$(fzf --zsh)"
