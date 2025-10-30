@@ -20,6 +20,7 @@ export PATH="$HOME/.local/bin:$PATH"
 # aliasses
 alias ls='ls --color=auto'
 alias op='open_pdf.sh'
+alias github="open_github.sh"
 
 # Shell integrations
 eval "$(fzf --zsh)"

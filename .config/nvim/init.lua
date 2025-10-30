@@ -128,6 +128,7 @@ map("n", "<leader>sb", ":Pick buffers<CR>")
 
 map("n", "-", ":Oil<CR>")
 
+
 -- terminal
 --small terminal
 map("n", "<leader>st", function ()
@@ -142,7 +143,8 @@ local term_state = {
 	floating = {
 		buf = -1,
 		win = -1,
-	}
+	},
+	job_id = 0,
 }
 local function create_terminal(state)
 	state = state or {}
@@ -170,9 +172,35 @@ map({"n", "t"}, "<C-;>", function()
 		term_state.floating = create_terminal({buf = term_state.floating.buf})
 		if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
 			vim.cmd.term()
+			term_state.job_id = vim.bo.channel
 		end
 		vim.cmd.startinsert()
 	else
 		vim.api.nvim_win_hide(term_state.floating.win)
 	end
 end)
+
+-- opening current typst file as pdf
+vim.api.nvim_create_user_command("Typopen", function()
+	local filename = vim.api.nvim_buf_get_name(0)
+	filename = string.gsub(filename, ".typ", ".pdf")
+	vim.ui.open(filename)
+end, {})
+
+-- running typst watch on the current file
+vim.api.nvim_create_user_command("Typwatch", function()
+	local filename = vim.api.nvim_buf_get_name(0)
+	if not vim.api.nvim_win_is_valid(term_state.floating.win) then
+		term_state.floating = create_terminal({buf = term_state.floating.buf})
+		if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
+			vim.cmd.term()
+			term_state.job_id = vim.bo.channel
+		end
+	else
+		vim.api.nvim_win_hide(term_state.floating.win)
+	end
+	local cmd = "typst watch " .. filename .. "\r\n"
+	vim.fn.chansend(term_state.job_id, {cmd})
+end, {})
+
+
