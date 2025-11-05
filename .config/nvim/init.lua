@@ -6,14 +6,11 @@ vim.o.wrap = false
 vim.o.tabstop = 4
 vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
--- vim.o.expandtab = true
 
 -- vim.opt.swapfile = false
--- vim.o.showmode = false --should prolly turn this off since it will be in the statusline
-
 vim.o.breakindent = true
 
--- case insensitive searching except when good 
+-- case insensitive searching except when good
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
@@ -37,22 +34,20 @@ vim.o.inccommand = 'split'
 local map = vim.keymap.set
 
 -- system clipboard
-map({"n", "v", "x"}, "<leader>y", '"+y')
-map({"n", "v", "x"}, "<leader>p", '"+p')
+map({ "n", "v", "x" }, "<leader>y", '"+y')
+map({ "n", "v", "x" }, "<leader>p", '"+p')
 
-map("n", "<C-h>", "<C-w><C-h>" )
-map("n", "<C-l>", "<C-w><C-l>" )
-map("n", "<C-j>", "<C-w><C-j>" )
-map("n", "<C-k>", "<C-w><C-k>" )
+map("n", "<C-h>", "<C-w><C-h>")
+map("n", "<C-l>", "<C-w><C-l>")
+map("n", "<C-j>", "<C-w><C-j>")
+map("n", "<C-k>", "<C-w><C-k>")
 
 -- quickfix
 map("n", "<M-j>", "<cmd>cnext<CR>")
 map("n", "<M-k>", "<cmd>cprev<CR>")
 
-
 -- Clear highlights on search when pressing <Esc> in normal mode
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
-
 
 -- Diagnostic keymaps
 map("n", "<leader>q", vim.diagnostic.setqflist)
@@ -68,15 +63,17 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-mini/mini.icons" },
 	{ src = "https://github.com/nvim-mini/mini.ai" },
 	{ src = "https://github.com/nvim-mini/mini.surround" },
+	{ src = "https://github.com/nvim-mini/mini.extra" },
 })
 
 require("oil").setup()
 require("mini.pick").setup()
+require('mini.extra').setup()
 require("mini.icons").setup()
 require("mini.ai").setup()
 require("mini.surround").setup()
 require("blink.cmp").setup({
-	keymap = {preset = "default"},
+	keymap = { preset = "default" },
 	appearance = {
 		use_nvim_cmp_as_default = true,
 		nerd_font_variant = "mono",
@@ -95,6 +92,22 @@ vim.lsp.enable({
 	"tinymist",
 })
 
+vim.diagnostic.config({
+	severity_sort = true,
+	float = { border = "rounded", source = "if_many" },
+	underline = { severity = vim.diagnostic.severity.ERROR },
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = "󰅚 ", -- IDK IF I actually prefer these icons
+			[vim.diagnostic.severity.WARN] = "󰀪 ",
+			[vim.diagnostic.severity.INFO] = "󰋽 ",
+			[vim.diagnostic.severity.HINT] = "󰌶 ",
+		},
+	},
+	virtual_text = { severity = vim.diagnostic.severity.ERROR },
+})
+
+
 require("vague").setup({
 	bold = false,
 	italic = false,
@@ -112,11 +125,9 @@ map("n", "<leader>e", vim.diagnostic.open_float)
 map("n", "gd", vim.lsp.buf.definition)
 map("n", "gD", vim.lsp.buf.declaration)
 
-map("n", "<leader>lf>", vim.lsp.buf.format)
+map("n", "<leader>lf", vim.lsp.buf.format)
 map("n", "grn", vim.lsp.buf.rename)
 map("n", "<leader>ca", vim.lsp.buf.code_action)
-
-
 
 -- picking
 map("n", "<leader>sf", ":Pick files<CR>")
@@ -124,14 +135,16 @@ map("n", "<leader>sh", ":Pick help<CR>")
 map("n", "<leader>sw", ":Pick grep<CR>")
 map("n", "<leader>sg", ":Pick grep_live<CR>")
 map("n", "<leader>sb", ":Pick buffers<CR>")
-
+-- finding files in the neovim config dir
+map("n", "<leader>sn", function()
+	require("mini.extra").pickers.explorer({cwd = vim.fn.stdpath("config")})
+end)
 
 map("n", "-", ":Oil<CR>")
 
-
 -- terminal
 --small terminal
-map("n", "<leader>st", function ()
+map("n", "<leader>st", function()
 	vim.cmd.vnew()
 	vim.cmd.term()
 	vim.cmd.wincmd("J")
@@ -164,12 +177,12 @@ local function create_terminal(state)
 		row = 0,
 		col = 0,
 	})
-	return {buf = buf, win = win}
+	return { buf = buf, win = win }
 end
 
-map({"n", "t"}, "<C-;>", function()
+map({ "n", "t" }, "<C-;>", function()
 	if not vim.api.nvim_win_is_valid(term_state.floating.win) then
-		term_state.floating = create_terminal({buf = term_state.floating.buf})
+		term_state.floating = create_terminal({ buf = term_state.floating.buf })
 		if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
 			vim.cmd.term()
 			term_state.job_id = vim.bo.channel
@@ -191,7 +204,7 @@ end, {})
 vim.api.nvim_create_user_command("Typwatch", function()
 	local filename = vim.api.nvim_buf_get_name(0)
 	if not vim.api.nvim_win_is_valid(term_state.floating.win) then
-		term_state.floating = create_terminal({buf = term_state.floating.buf})
+		term_state.floating = create_terminal({ buf = term_state.floating.buf })
 		if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
 			vim.cmd.term()
 			term_state.job_id = vim.bo.channel
@@ -200,7 +213,5 @@ vim.api.nvim_create_user_command("Typwatch", function()
 		vim.api.nvim_win_hide(term_state.floating.win)
 	end
 	local cmd = "typst watch " .. filename .. "\r\n"
-	vim.fn.chansend(term_state.job_id, {cmd})
+	vim.fn.chansend(term_state.job_id, { cmd })
 end, {})
-
-
