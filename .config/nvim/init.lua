@@ -54,6 +54,14 @@ map("n", "<leader>q", vim.diagnostic.setqflist)
 -- exit terminal mode
 map("t", "<Esc><Esc>", "<C-\\><C-n>")
 
+-- Move selected lines in visual mode
+map('v', "J", ":m '>+1<cr>gv=gv")
+map('v', "K", ":m '<-2<CR>gv=gv")
+
+-- Make current file executable
+map('n', "<leader>x", "<cmd>!chmod +x %<CR>")
+
+
 vim.pack.add({
 	{ src = "https://github.com/vague-theme/vague.nvim", },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
