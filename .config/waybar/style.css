@@ -132,9 +132,6 @@ button:hover {
 #clock {
     /* background-color: #64727D; */
 }
-#clock:hover {
-    background-color: #C2438C;
-}
 
 #battery {
     color: #ffffff;
