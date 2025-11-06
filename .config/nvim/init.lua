@@ -64,6 +64,8 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-mini/mini.ai" },
 	{ src = "https://github.com/nvim-mini/mini.surround" },
 	{ src = "https://github.com/nvim-mini/mini.extra" },
+	{ src = "https://github.com/nvim-lua/plenary.nvim" },
+	{ src = "https://github.com/ThePrimeagen/harpoon", version = "harpoon2" },
 })
 
 require("oil").setup()
@@ -107,7 +109,6 @@ vim.diagnostic.config({
 	virtual_text = { severity = vim.diagnostic.severity.ERROR },
 })
 
-
 require("vague").setup({
 	bold = false,
 	italic = false,
@@ -141,6 +142,17 @@ map("n", "<leader>sn", function()
 end)
 
 map("n", "-", ":Oil<CR>")
+
+-- harpoon
+local harpoon = require("harpoon")
+harpoon:setup()
+
+map("n", "<leader>a", function() harpoon:list():add() end)
+map("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+map('n', "<leader>q", function() harpoon:list():select(1) end) -- still unsure on my keymaps
+map('n', "<leader>w", function() harpoon:list():select(2) end) -- might use the number keys instead
+map('n', "<leader>e", function() harpoon:list():select(3) end)
+map('n', "<leader>r", function() harpoon:list():select(4) end)
 
 -- terminal
 --small terminal
