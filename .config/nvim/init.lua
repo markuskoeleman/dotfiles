@@ -157,10 +157,10 @@ harpoon:setup()
 
 map("n", "<leader>a", function() harpoon:list():add() end)
 map("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-map('n', "<leader>q", function() harpoon:list():select(1) end) -- still unsure on my keymaps
-map('n', "<leader>w", function() harpoon:list():select(2) end) -- might use the number keys instead
-map('n', "<leader>e", function() harpoon:list():select(3) end)
-map('n', "<leader>r", function() harpoon:list():select(4) end)
+map('n', "<leader>1", function() harpoon:list():select(1) end) -- still unsure on my keymaps
+map('n', "<leader>2", function() harpoon:list():select(2) end) -- might use the number keys instead
+map('n', "<leader>3", function() harpoon:list():select(3) end)
+map('n', "<leader>4", function() harpoon:list():select(4) end)
 
 -- terminal
 --small terminal
