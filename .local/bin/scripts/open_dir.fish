@@ -14,11 +14,12 @@ find ~/uni/pogramaermethodeiken/ ~/uni/maths ~/uni/physics ~/coding ~/.dotfiles/
 	fzf
 )
 
-# Add home path back
-set selected "$HOME/$selected"
-
+# check if the path selected path is empty, (user did not select anything)
 if not test -n "$selected"
 	exit 1
 end
+
+# Add home path back
+set selected "$HOME/$selected"
 
 cd $selected
