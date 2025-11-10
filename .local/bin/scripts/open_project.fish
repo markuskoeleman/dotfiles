@@ -3,7 +3,7 @@
 # Which will terminate when the script exits, so the main shell won't be affected.
 #
 # Just alias it, something like:
-# alias -s co="source ~/.local/bin/scripts/open_dir.fish"
+# alias -s co="source ~/.local/bin/scripts/open_project.fish"
 # *please note that the full path needs to be specified here, 
 # the $PATH variable doesn't seemingly affect the source command
 
