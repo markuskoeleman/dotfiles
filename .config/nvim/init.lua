@@ -61,22 +61,17 @@ map('v', "K", ":m '<-2<CR>gv=gv")
 -- Make current file executable
 map('n', "<leader>x", "<cmd>!chmod +x %<CR>")
 
-
 vim.pack.add({
 	{ src = "https://github.com/vague-theme/vague.nvim", },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = 'https://github.com/Saghen/blink.cmp', version = vim.version.range('*') },
-	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/nvim-mini/mini.pick" },
 	{ src = "https://github.com/nvim-mini/mini.icons" },
 	{ src = "https://github.com/nvim-mini/mini.ai" },
 	{ src = "https://github.com/nvim-mini/mini.surround" },
+	{ src = "https://github.com/nvim-mini/mini.files" },
 	{ src = "https://github.com/nvim-mini/mini.extra" },
-	{ src = "https://github.com/nvim-lua/plenary.nvim" },
-	{ src = "https://github.com/ThePrimeagen/harpoon", version = "harpoon2" },
 })
-
-require("oil").setup()
 require("mini.pick").setup()
 require('mini.extra').setup()
 require("mini.icons").setup()
@@ -89,6 +84,11 @@ require("blink.cmp").setup({
 		nerd_font_variant = "mono",
 	},
 	signature = { enabled = true },
+})
+require("mini.files").setup({
+	options = {
+		permanent_delete = false,
+	}
 })
 
 vim.lsp.config.capabilities = require("blink.cmp").get_lsp_capabilities()
@@ -129,38 +129,27 @@ vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { link = "DiagnosticUnnecessary"
 
 -- lsp
 map("n", "<leader>q", vim.diagnostic.setqflist)
-map("n", "<leader>e", vim.diagnostic.open_float)
 
 map("n", "gd", vim.lsp.buf.definition)
 map("n", "gD", vim.lsp.buf.declaration)
 
 map("n", "<leader>lf", vim.lsp.buf.format)
 map("n", "grn", vim.lsp.buf.rename)
-map("n", "<leader>ca", vim.lsp.buf.code_action)
 
 -- picking
-map("n", "<leader>sf", ":Pick files<CR>")
+map("n", "<leader>f", ":Pick files<CR>")
 map("n", "<leader>sh", ":Pick help<CR>")
 map("n", "<leader>sw", ":Pick grep<CR>")
 map("n", "<leader>sg", ":Pick grep_live<CR>")
 map("n", "<leader>sb", ":Pick buffers<CR>")
+map("n", "<leader>sd", ":Pick diagnostic<CR>")
+
 -- finding files in the neovim config dir
 map("n", "<leader>sn", function()
 	require("mini.extra").pickers.explorer({cwd = vim.fn.stdpath("config")})
 end)
 
-map("n", "-", ":Oil<CR>")
-
--- harpoon
-local harpoon = require("harpoon")
-harpoon:setup()
-
-map("n", "<leader>a", function() harpoon:list():add() end)
-map("n", "<C-e>", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-map('n', "<leader>1", function() harpoon:list():select(1) end) -- still unsure on my keymaps
-map('n', "<leader>2", function() harpoon:list():select(2) end) -- might use the number keys instead
-map('n', "<leader>3", function() harpoon:list():select(3) end)
-map('n', "<leader>4", function() harpoon:list():select(4) end)
+map("n", "<leader>e", require("mini.files").open)
 
 -- terminal
 --small terminal
