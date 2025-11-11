@@ -59,9 +59,6 @@ map("t", "<Esc><Esc>", "<C-\\><C-n>")
 map('v', "J", ":m '>+1<cr>gv=gv")
 map('v', "K", ":m '<-2<CR>gv=gv")
 
--- Make current file executable
-map('n', "<leader>x", "<cmd>!chmod +x %<CR>")
-
 vim.pack.add({
 	{ src = "https://github.com/vague-theme/vague.nvim", },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
@@ -74,13 +71,13 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-mini/mini.extra" },
 	{ src = "https://github.com/folke/flash.nvim" },
 })
-require("mini.pick").setup()
-require('mini.extra').setup()
 require("mini.icons").setup()
+require("mini.pick").setup()
 require("mini.ai").setup()
+require('mini.extra').setup()
 require("mini.surround").setup({
 	mappings = {
-		add = 'gsa',  -- Add surrounding in Normal and Visual modes
+		add = 'gsa', -- Add surrounding in Normal and Visual modes
 		delete = 'gsd', -- Delete surrounding
 		find = 'gsf', -- Find surrounding (to the right)
 		find_left = 'gsF', -- Find surrounding (to the left)
@@ -94,7 +91,6 @@ require("mini.surround").setup({
 require("blink.cmp").setup({
 	keymap = { preset = "default" },
 	appearance = {
-		use_nvim_cmp_as_default = true,
 		nerd_font_variant = "mono",
 	},
 	signature = { enabled = true },
@@ -254,3 +250,5 @@ vim.api.nvim_create_user_command("Typwatch", function()
 	local cmd = "typst watch " .. filename .. "\r\n"
 	vim.fn.chansend(term_state.job_id, { cmd })
 end, {})
+-- making current file executable
+vim.api.nvim_create_user_command("Chmod", "!chmod +x %<CR>", {})
