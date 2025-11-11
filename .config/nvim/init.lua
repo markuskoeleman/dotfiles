@@ -31,8 +31,9 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
 
-local map = vim.keymap.set
+vim.o.statusline = [[%f %m %y%= %-14.(%l-%L %c%V%) %P]]
 
+local map = vim.keymap.set
 -- system clipboard
 map({ "n", "v", "x" }, "<leader>y", '"+y')
 map({ "n", "v", "x" }, "<leader>p", '"+p')
@@ -64,19 +65,32 @@ map('n', "<leader>x", "<cmd>!chmod +x %<CR>")
 vim.pack.add({
 	{ src = "https://github.com/vague-theme/vague.nvim", },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
-	{ src = 'https://github.com/Saghen/blink.cmp', version = vim.version.range('*') },
+	{ src = 'https://github.com/Saghen/blink.cmp',       version = vim.version.range('*') },
 	{ src = "https://github.com/nvim-mini/mini.pick" },
 	{ src = "https://github.com/nvim-mini/mini.icons" },
 	{ src = "https://github.com/nvim-mini/mini.ai" },
 	{ src = "https://github.com/nvim-mini/mini.surround" },
 	{ src = "https://github.com/nvim-mini/mini.files" },
 	{ src = "https://github.com/nvim-mini/mini.extra" },
+	{ src = "https://github.com/folke/flash.nvim" },
 })
 require("mini.pick").setup()
 require('mini.extra').setup()
 require("mini.icons").setup()
 require("mini.ai").setup()
-require("mini.surround").setup()
+require("mini.surround").setup({
+	mappings = {
+		add = 'gsa',  -- Add surrounding in Normal and Visual modes
+		delete = 'gsd', -- Delete surrounding
+		find = 'gsf', -- Find surrounding (to the right)
+		find_left = 'gsF', -- Find surrounding (to the left)
+		highlight = 'gsh', -- Highlight surrounding
+		replace = 'gsr', -- Replace surrounding
+
+		suffix_last = 'l', -- Suffix to search with "prev" method
+		suffix_next = 'n', -- Suffix to search with "next" method
+	},
+})
 require("blink.cmp").setup({
 	keymap = { preset = "default" },
 	appearance = {
@@ -89,6 +103,27 @@ require("mini.files").setup({
 	options = {
 		permanent_delete = false,
 	}
+})
+require("flash").setup({
+	labels = "asdfghjklqwertyuiopzxcvbnm",
+	highlight = {
+		backdrop = false,
+	},
+	label = {
+		uppercase = false, -- bit too much cognitive load for me idk
+	},
+	modes = {
+		char = {
+			enabled = false,
+		},
+		search = {
+			enabled = false,
+		},
+	},
+})
+require("vague").setup({
+	bold = false,
+	italic = false,
 })
 
 vim.lsp.config.capabilities = require("blink.cmp").get_lsp_capabilities()
@@ -117,24 +152,18 @@ vim.diagnostic.config({
 	virtual_text = { severity = vim.diagnostic.severity.ERROR },
 })
 
-require("vague").setup({
-	bold = false,
-	italic = false,
-})
-
 vim.cmd("colorscheme vague")
 
 -- disable greying out unsused
-vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { link = "DiagnosticUnnecessary" })
+vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", {})
+-- wanted to make the flash label a little more visible
+vim.api.nvim_set_hl(0, "FlashLabel", { bg = "#CC0066", fg = "#FFFFFF" })
+
+map({ "n", "x", "o" }, "s", require("flash").jump)
 
 -- lsp
 map("n", "<leader>q", vim.diagnostic.setqflist)
-
-map("n", "gd", vim.lsp.buf.definition)
-map("n", "gD", vim.lsp.buf.declaration)
-
 map("n", "<leader>lf", vim.lsp.buf.format)
-map("n", "grn", vim.lsp.buf.rename)
 
 -- picking
 map("n", "<leader>f", ":Pick files<CR>")
@@ -143,10 +172,11 @@ map("n", "<leader>sw", ":Pick grep<CR>")
 map("n", "<leader>sg", ":Pick grep_live<CR>")
 map("n", "<leader>sb", ":Pick buffers<CR>")
 map("n", "<leader>sd", ":Pick diagnostic<CR>")
+map("n", "<leader>sl", function() require("mini.extra").pickers.lsp({ scope = 'document_symbol' }) end)
 
 -- finding files in the neovim config dir
 map("n", "<leader>sn", function()
-	require("mini.extra").pickers.explorer({cwd = vim.fn.stdpath("config")})
+	require("mini.extra").pickers.explorer({ cwd = vim.fn.stdpath("config") })
 end)
 
 map("n", "<leader>e", require("mini.files").open)
