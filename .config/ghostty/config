@@ -1,0 +1,8 @@
+font-size = 13
+theme = Kitty Default
+
+quit-after-last-window-closed = false
+
+window-decoration = false
+gtk-single-instance = true
+window-theme = system

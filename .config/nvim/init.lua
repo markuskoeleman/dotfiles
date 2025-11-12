@@ -60,7 +60,7 @@ map('v', "J", ":m '>+1<cr>gv=gv")
 map('v', "K", ":m '<-2<CR>gv=gv")
 
 vim.pack.add({
-	{ src = "https://github.com/vague-theme/vague.nvim", },
+	{ src = "https://github.com/vague-theme/vague.nvim" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = 'https://github.com/Saghen/blink.cmp',       version = vim.version.range('*') },
 	{ src = "https://github.com/nvim-mini/mini.pick" },
@@ -121,6 +121,7 @@ require("vague").setup({
 	bold = false,
 	italic = false,
 })
+
 
 vim.lsp.config.capabilities = require("blink.cmp").get_lsp_capabilities()
 
