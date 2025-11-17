@@ -1,8 +1,11 @@
 font-size = 13
-theme = Kitty Default
+theme = Builtin Pastel Dark
 
 quit-after-last-window-closed = false
 
 window-decoration = false
 gtk-single-instance = true
 window-theme = system
+window-padding-x = 0
+window-padding-y = 0
+

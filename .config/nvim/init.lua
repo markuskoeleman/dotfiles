@@ -7,7 +7,7 @@ vim.o.tabstop = 4
 vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
 
--- vim.opt.swapfile = false
+vim.opt.swapfile = false
 vim.o.breakindent = true
 
 -- case insensitive searching except when good
@@ -118,10 +118,10 @@ require("flash").setup({
 	},
 })
 require("vague").setup({
+	transparent = true,
 	bold = false,
 	italic = false,
 })
-
 
 vim.lsp.config.capabilities = require("blink.cmp").get_lsp_capabilities()
 
@@ -140,7 +140,7 @@ vim.diagnostic.config({
 	underline = { severity = vim.diagnostic.severity.ERROR },
 	signs = {
 		text = {
-			[vim.diagnostic.severity.ERROR] = "󰅚 ", -- IDK IF I actually prefer these icons
+			[vim.diagnostic.severity.ERROR] = "󰅚 ",
 			[vim.diagnostic.severity.WARN] = "󰀪 ",
 			[vim.diagnostic.severity.INFO] = "󰋽 ",
 			[vim.diagnostic.severity.HINT] = "󰌶 ",
@@ -163,12 +163,12 @@ map("n", "<leader>q", vim.diagnostic.setqflist)
 map("n", "<leader>lf", vim.lsp.buf.format)
 
 -- picking
-map("n", "<leader>f", ":Pick files<CR>")
-map("n", "<leader>sh", ":Pick help<CR>")
-map("n", "<leader>sw", ":Pick grep<CR>")
-map("n", "<leader>sg", ":Pick grep_live<CR>")
-map("n", "<leader>sb", ":Pick buffers<CR>")
-map("n", "<leader>sd", ":Pick diagnostic<CR>")
+map("n", "<leader>f", "<cmd>Pick files<CR>")
+map("n", "<leader>sh", "<cmd>Pick help<CR>")
+map("n", "<leader>sw", "<cmd>Pick grep<CR>")
+map("n", "<leader>sg", "<cmd>Pick grep_live<CR>")
+map("n", "<leader>sb", "<cmd>Pick buffers<CR>")
+map("n", "<leader>sd", "<cmd>Pick diagnostic<CR>")
 map("n", "<leader>sl", function() require("mini.extra").pickers.lsp({ scope = 'document_symbol' }) end)
 
 -- finding files in the neovim config dir
