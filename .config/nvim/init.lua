@@ -70,11 +70,14 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-mini/mini.files" },
 	{ src = "https://github.com/nvim-mini/mini.extra" },
 	{ src = "https://github.com/folke/flash.nvim" },
+
+	{ src = "https://github.com/bassamsdata/namu.nvim" },
 })
 require("mini.icons").setup()
 require("mini.pick").setup()
 require("mini.ai").setup()
 require('mini.extra').setup()
+require("mini.files").setup()
 require("mini.surround").setup({
 	mappings = {
 		add = 'gsa', -- Add surrounding in Normal and Visual modes
@@ -95,11 +98,6 @@ require("blink.cmp").setup({
 	},
 	signature = { enabled = true },
 })
-require("mini.files").setup({
-	options = {
-		permanent_delete = false,
-	}
-})
 require("flash").setup({
 	labels = "asdfghjklqwertyuiopzxcvbnm",
 	highlight = {
@@ -117,6 +115,7 @@ require("flash").setup({
 		},
 	},
 })
+require("namu").setup()
 require("vague").setup({
 	transparent = true,
 	bold = false,
@@ -171,9 +170,17 @@ map("n", "<leader>sb", "<cmd>Pick buffers<CR>")
 map("n", "<leader>sd", "<cmd>Pick diagnostic<CR>")
 map("n", "<leader>sl", function() require("mini.extra").pickers.lsp({ scope = 'document_symbol' }) end)
 
+-- namu
+map("n", "<leader>sf", "<cmd>Namu symbols<CR>")
+map("n", "<leader>sd", "<cmd>Namu diagnostics<CR>")
+
 -- finding files in the neovim config dir
 map("n", "<leader>sn", function()
 	require("mini.extra").pickers.explorer({ cwd = vim.fn.stdpath("config") })
+end)
+-- finding files in neovim plugin dir
+map("n", "<leader>sp", function()
+	require("mini.pick").builtin.files(nil, { source = { cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "site") }})
 end)
 
 map("n", "<leader>e", require("mini.files").open)
