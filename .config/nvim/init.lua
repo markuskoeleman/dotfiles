@@ -31,7 +31,7 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
 
-vim.o.statusline = [[%f %m %y%= %-14.(%l-%L %c%V%) %P]]
+vim.o.statusline = [[ %<%f %m %y%= %-14.(%l-%L %c%V%) %P ]]
 
 local map = vim.keymap.set
 -- system clipboard
@@ -70,8 +70,6 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-mini/mini.files" },
 	{ src = "https://github.com/nvim-mini/mini.extra" },
 	{ src = "https://github.com/folke/flash.nvim" },
-
-	{ src = "https://github.com/bassamsdata/namu.nvim" },
 })
 require("mini.icons").setup()
 require("mini.pick").setup()
@@ -115,7 +113,6 @@ require("flash").setup({
 		},
 	},
 })
-require("namu").setup()
 require("vague").setup({
 	transparent = true,
 	bold = false,
@@ -152,7 +149,7 @@ vim.cmd("colorscheme vague")
 
 -- disable greying out unsused
 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", {})
--- wanted to make the flash label a little more visible
+-- wanted to make the flash labels a little more visible
 vim.api.nvim_set_hl(0, "FlashLabel", { bg = "#CC0066", fg = "#FFFFFF" })
 
 map({ "n", "x", "o" }, "s", require("flash").jump)
@@ -170,22 +167,20 @@ map("n", "<leader>sb", "<cmd>Pick buffers<CR>")
 map("n", "<leader>sd", "<cmd>Pick diagnostic<CR>")
 map("n", "<leader>sl", function() require("mini.extra").pickers.lsp({ scope = 'document_symbol' }) end)
 
--- namu
-map("n", "<leader>sf", "<cmd>Namu symbols<CR>")
-map("n", "<leader>sd", "<cmd>Namu diagnostics<CR>")
-
 -- finding files in the neovim config dir
 map("n", "<leader>sn", function()
 	require("mini.extra").pickers.explorer({ cwd = vim.fn.stdpath("config") })
 end)
 -- finding files in neovim plugin dir
 map("n", "<leader>sp", function()
-	require("mini.pick").builtin.files(nil, { source = { cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "site") }})
+	require("mini.pick").builtin.files(nil, { source = { cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "site") } })
 end)
 
 map("n", "<leader>e", require("mini.files").open)
 
--- terminal
+map("n", "<leader>tw", "<cmd>Typstwatch<CR>")
+map("n", "<leader>to", "<cmd>Typstopen<CR>")
+
 --small terminal
 map("n", "<leader>st", function()
 	vim.cmd.vnew()
@@ -236,27 +231,25 @@ map({ "n", "t" }, "<C-;>", function()
 	end
 end)
 
--- opening current typst file as pdf
-vim.api.nvim_create_user_command("Typopen", function()
+local typst_open_file = function()
 	local filename = vim.api.nvim_buf_get_name(0)
 	filename = string.gsub(filename, ".typ", ".pdf")
 	vim.ui.open(filename)
-end, {})
+end
 
--- running typst watch on the current file
-vim.api.nvim_create_user_command("Typwatch", function()
+local typst_watch_file = function()
 	local filename = vim.api.nvim_buf_get_name(0)
-	if not vim.api.nvim_win_is_valid(term_state.floating.win) then
-		term_state.floating = create_terminal({ buf = term_state.floating.buf })
-		if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
-			vim.cmd.term()
-			term_state.job_id = vim.bo.channel
-		end
-	else
-		vim.api.nvim_win_hide(term_state.floating.win)
+	term_state.floating = create_terminal({ buf = term_state.floating.buf })
+	if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
+		vim.cmd.term()
+		term_state.job_id = vim.bo.channel
 	end
 	local cmd = "typst watch " .. filename .. "\r\n"
 	vim.fn.chansend(term_state.job_id, { cmd })
-end, {})
+end
+-- opening current typst file as pdf
+vim.api.nvim_create_user_command("Typstopen", typst_open_file, {})
+-- running typst watch on the current file
+vim.api.nvim_create_user_command("Typstwatch", typst_watch_file, {})
 -- making current file executable
 vim.api.nvim_create_user_command("Chmod", "!chmod +x %<CR>", {})
