@@ -181,15 +181,6 @@ map("n", "<leader>e", require("mini.files").open)
 
 map("n", "<leader>tw", "<cmd>Typstwatch<CR>")
 map("n", "<leader>to", "<cmd>Typstopen<CR>")
-
---small terminal
-map("n", "<leader>st", function()
-	vim.cmd.vnew()
-	vim.cmd.term()
-	vim.cmd.wincmd("J")
-	vim.api.nvim_win_set_height(0, 5)
-	vim.cmd.startinsert()
-end)
 -- fullscreen terminal
 local term_state = {
 	floating = {
