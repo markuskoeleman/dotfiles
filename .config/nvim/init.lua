@@ -173,7 +173,8 @@ map("n", "<leader>sn", function()
 end)
 -- finding files in neovim plugin dir
 map("n", "<leader>sp", function()
-	require("mini.pick").builtin.files(nil, { source = { cwd = vim.fs.joinpath(vim.fn.stdpath("data"), "site") } })
+	require("mini.extra").pickers.explorer({ cwd = vim.fs.joinpath(vim.fn.stdpath("data"),
+		"site", "pack", "core", "opt") })
 end)
 
 map("n", "<leader>e", require("mini.files").open)
