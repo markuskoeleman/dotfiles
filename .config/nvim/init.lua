@@ -10,7 +10,6 @@ vim.o.shiftwidth = 4
 vim.opt.swapfile = false
 vim.o.breakindent = true
 
--- case insensitive searching except when good
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
@@ -50,7 +49,6 @@ map("n", "<M-k>", "<cmd>cprev<CR>")
 -- Clear highlights on search when pressing <Esc> in normal mode
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
--- Diagnostic keymaps
 map("n", "<leader>q", vim.diagnostic.setqflist)
 -- exit terminal mode
 map("t", "<Esc><Esc>", "<C-\\><C-n>")
@@ -236,6 +234,11 @@ end
 
 local function typst_open_file()
 	local filename = vim.api.nvim_buf_get_name(0)
+
+	if not string.find(filename, ".typ") then
+		print("Failed to open file: File is not a typst file")
+		return
+	end
 	filename = string.gsub(filename, ".typ", ".pdf")
 	vim.ui.open(filename)
 end
@@ -243,6 +246,10 @@ end
 local function typst_watch_file()
 	if not term_state.typst.is_watching then
 		local filename = vim.api.nvim_buf_get_name(0)
+		if not string.find(filename, ".typ") then
+			print("Unable to watch file: File is not a typst file")
+			return
+		end
 		term_state.floating = create_terminal({ buf = term_state.floating.buf })
 		if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
 			vim.cmd.term()
