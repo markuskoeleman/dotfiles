@@ -56,8 +56,8 @@ map("n", "<leader>q", vim.diagnostic.setqflist)
 map("t", "<Esc><Esc>", "<C-\\><C-n>")
 
 -- Move selected lines in visual mode
-map('v', "J", ":m '>+1<cr>gv=gv")
-map('v', "K", ":m '<-2<CR>gv=gv")
+map('x', "J", ":m '>+1<cr>gv=gv")
+map('x', "K", ":m '<-2<CR>gv=gv")
 
 vim.pack.add({
 	{ src = "https://github.com/vague-theme/vague.nvim" },
@@ -121,6 +121,14 @@ require("vague").setup({
 
 vim.lsp.config.capabilities = require("blink.cmp").get_lsp_capabilities()
 
+-- I hate placeholder arguments in completions
+vim.lsp.config("clangd", {
+	cmd = {
+		"clangd",
+		"--function-arg-placeholders=0",
+	}
+})
+
 vim.lsp.enable({
 	"lua_ls",
 	"clangd",
@@ -173,14 +181,14 @@ map("n", "<leader>sn", function()
 end)
 -- finding files in neovim plugin dir
 map("n", "<leader>sp", function()
-	require("mini.extra").pickers.explorer({ cwd = vim.fs.joinpath(vim.fn.stdpath("data"),
-		"site", "pack", "core", "opt") })
+	require("mini.extra").pickers.explorer({
+		cwd = vim.fs.joinpath(vim.fn.stdpath("data"),
+			"site", "pack", "core", "opt")
+	})
 end)
 
 map("n", "<leader>e", require("mini.files").open)
 
-map("n", "<leader>tw", "<cmd>Typstwatch<CR>")
-map("n", "<leader>to", "<cmd>Typstopen<CR>")
 -- fullscreen terminal
 local term_state = {
 	floating = {
@@ -188,6 +196,9 @@ local term_state = {
 		win = -1,
 	},
 	job_id = 0,
+	typst = {
+		is_watching = false,
+	},
 }
 local function create_terminal(state)
 	state = state or {}
@@ -210,7 +221,7 @@ local function create_terminal(state)
 	return { buf = buf, win = win }
 end
 
-map({ "n", "t" }, "<C-;>", function()
+local function toggle_term()
 	if not vim.api.nvim_win_is_valid(term_state.floating.win) then
 		term_state.floating = create_terminal({ buf = term_state.floating.buf })
 		if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
@@ -221,27 +232,34 @@ map({ "n", "t" }, "<C-;>", function()
 	else
 		vim.api.nvim_win_hide(term_state.floating.win)
 	end
-end)
+end
 
-local typst_open_file = function()
+local function typst_open_file()
 	local filename = vim.api.nvim_buf_get_name(0)
 	filename = string.gsub(filename, ".typ", ".pdf")
 	vim.ui.open(filename)
 end
 
-local typst_watch_file = function()
-	local filename = vim.api.nvim_buf_get_name(0)
-	term_state.floating = create_terminal({ buf = term_state.floating.buf })
-	if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
-		vim.cmd.term()
-		term_state.job_id = vim.bo.channel
+local function typst_watch_file()
+	if not term_state.typst.is_watching then
+		local filename = vim.api.nvim_buf_get_name(0)
+		term_state.floating = create_terminal({ buf = term_state.floating.buf })
+		if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
+			vim.cmd.term()
+			term_state.job_id = vim.bo.channel
+		end
+		local cmd = "typst watch " .. filename .. "\r\n"
+		vim.fn.chansend(term_state.job_id, { cmd })
+		term_state.typst.is_watching = true
+	else
+		vim.api.nvim_buf_delete(term_state.floating.buf, { force = true })
+		term_state.typst.is_watching = false
+		typst_watch_file()
 	end
-	local cmd = "typst watch " .. filename .. "\r\n"
-	vim.fn.chansend(term_state.job_id, { cmd })
 end
--- opening current typst file as pdf
-vim.api.nvim_create_user_command("Typstopen", typst_open_file, {})
--- running typst watch on the current file
-vim.api.nvim_create_user_command("Typstwatch", typst_watch_file, {})
+
+map({ "n", "t" }, "<C-;>", toggle_term)
+map("n", "<leader>tw", typst_watch_file)
+map("n", "<leader>to", typst_open_file)
 -- making current file executable
 vim.api.nvim_create_user_command("Chmod", "!chmod +x %<CR>", {})
