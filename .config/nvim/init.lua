@@ -30,7 +30,7 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
 
-vim.o.statusline = [[ %<%f %m %y%= %-14.(%l-%L %c%V%) %P ]]
+vim.o.statusline = [[ %<%f%m %y%= %-14.(%l-%L %c%V%) %P ]]
 
 local map = vim.keymap.set
 -- system clipboard
@@ -93,9 +93,16 @@ require("blink.cmp").setup({
 		nerd_font_variant = "mono",
 	},
 	signature = { enabled = true },
+	completion = {
+		list = {
+			selection = {
+				preselect = false, -- Allows me to avoid function placeholder argument snippets
+			},
+		},
+	},
 })
 require("flash").setup({
-	labels = "asdfghjklqwertyuiopzxcvbnm",
+	labels = "asdfghjklqwertyuiopzxcvbnm;",
 	highlight = {
 		backdrop = false,
 	},
@@ -115,16 +122,6 @@ require("vague").setup({
 	transparent = true,
 	bold = false,
 	italic = false,
-})
-
-vim.lsp.config.capabilities = require("blink.cmp").get_lsp_capabilities()
-
--- I hate placeholder arguments in completions
-vim.lsp.config("clangd", {
-	cmd = {
-		"clangd",
-		"--function-arg-placeholders=0",
-	}
 })
 
 vim.lsp.enable({
@@ -171,6 +168,7 @@ map("n", "<leader>sw", "<cmd>Pick grep<CR>")
 map("n", "<leader>sg", "<cmd>Pick grep_live<CR>")
 map("n", "<leader>sb", "<cmd>Pick buffers<CR>")
 map("n", "<leader>sd", "<cmd>Pick diagnostic<CR>")
+map("n", "<leader>sm", "<cmd>Pick keymaps<CR>")
 map("n", "<leader>sl", function() require("mini.extra").pickers.lsp({ scope = 'document_symbol' }) end)
 
 -- finding files in the neovim config dir
