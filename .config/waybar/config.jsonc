@@ -60,7 +60,7 @@
 		"tooltip-format": "{ifname} via {gwaddr} ",
 		"format-linked": "{ifname} (No IP) ",
 		"format-disconnected": "Disconnected ⚠",
-		"on-click": "kitty -e ~/.config/waybar/scripts/network.sh"
+		"on-click": "foot -e ~/.config/waybar/scripts/network.sh"
 	},
 	"pulseaudio": {
 		"format": "{volume}% {icon} {format_source}",
