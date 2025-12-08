@@ -234,7 +234,7 @@ local function typst_open_file()
 	local filename = vim.api.nvim_buf_get_name(0)
 
 	if not string.find(filename, ".typ") then
-		print("Failed to open file: File is not a typst file")
+		print("Failed to open file, File is not a typst file")
 		return
 	end
 	filename = string.gsub(filename, ".typ", ".pdf")
@@ -245,7 +245,7 @@ local function typst_watch_file()
 	if not term_state.typst.is_watching then
 		local filename = vim.api.nvim_buf_get_name(0)
 		if not string.find(filename, ".typ") then
-			print("Unable to watch file: File is not a typst file")
+			print("Unable to watch file, File is not a typst file")
 			return
 		end
 		term_state.floating = create_terminal({ buf = term_state.floating.buf })
