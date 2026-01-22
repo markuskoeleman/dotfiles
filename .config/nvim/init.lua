@@ -61,12 +61,7 @@ vim.pack.add({
 	{ src = "https://github.com/vague-theme/vague.nvim" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = 'https://github.com/Saghen/blink.cmp',       version = vim.version.range('*') },
-	{ src = "https://github.com/nvim-mini/mini.pick" },
-	{ src = "https://github.com/nvim-mini/mini.icons" },
-	{ src = "https://github.com/nvim-mini/mini.ai" },
-	{ src = "https://github.com/nvim-mini/mini.surround" },
-	{ src = "https://github.com/nvim-mini/mini.files" },
-	{ src = "https://github.com/nvim-mini/mini.extra" },
+	{ src = "https://github.com/nvim-mini/mini.nvim" },
 	{ src = "https://github.com/folke/flash.nvim" },
 })
 require("mini.icons").setup()
