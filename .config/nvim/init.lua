@@ -60,7 +60,7 @@ map('x', "K", ":m '<-2<CR>gv=gv")
 vim.pack.add({
 	{ src = "https://github.com/vague-theme/vague.nvim" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
-	{ src = 'https://github.com/Saghen/blink.cmp',       version = vim.version.range('*') },
+	{ src = 'https://github.com/Saghen/blink.cmp',      version = vim.version.range('*') },
 	{ src = "https://github.com/nvim-mini/mini.nvim" },
 	{ src = "https://github.com/folke/flash.nvim" },
 })
@@ -68,7 +68,11 @@ require("mini.icons").setup()
 require("mini.pick").setup()
 require("mini.ai").setup()
 require('mini.extra').setup()
-require("mini.files").setup()
+require("mini.files").setup({
+	mappings = {
+		go_in_plus = "<CR>"
+	}
+})
 require("mini.surround").setup({
 	mappings = {
 		add = 'gsa', -- Add surrounding in Normal and Visual modes
