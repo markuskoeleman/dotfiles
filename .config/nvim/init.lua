@@ -230,19 +230,27 @@ local function toggle_term()
 end
 
 local function typst_open_file()
-	local filename = vim.api.nvim_buf_get_name(0)
+	local filepath = vim.api.nvim_buf_get_name(0)
+	local filename = vim.fs.basename(filepath)
+	local dir = vim.fs.dirname(filepath)
+	local dirname = vim.fs.basename(dir)
+	local output = dir .. '/' .. dirname .. '-' .. string.gsub(filename, ".typ", ".pdf")
 
 	if not string.find(filename, ".typ") then
 		print("Failed to open file, File is not a typst file")
 		return
 	end
-	filename = string.gsub(filename, ".typ", ".pdf")
-	vim.ui.open(filename)
+	vim.ui.open(output)
 end
 
 local function typst_watch_file()
 	if not term_state.typst.is_watching then
-		local filename = vim.api.nvim_buf_get_name(0)
+		local filepath = vim.api.nvim_buf_get_name(0)
+		local filename = vim.fs.basename(filepath)
+		local dir = vim.fs.dirname(filepath)
+		local dirname = vim.fs.basename(dir)
+		local output = dir .. '/' .. dirname .. '-' .. string.gsub(filename, ".typ", ".pdf")
+
 		if not string.find(filename, ".typ") then
 			print("Unable to watch file, File is not a typst file")
 			return
@@ -252,7 +260,7 @@ local function typst_watch_file()
 			vim.cmd.term()
 			term_state.job_id = vim.bo.channel
 		end
-		local cmd = "typst watch " .. filename .. "\r\n"
+		local cmd = "typst watch " .. filepath .. " " .. output .. "\r\n"
 		vim.fn.chansend(term_state.job_id, { cmd })
 		term_state.typst.is_watching = true
 	else
