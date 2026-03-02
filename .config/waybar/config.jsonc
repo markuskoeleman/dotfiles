@@ -7,6 +7,7 @@
 		"clock"
 	],
 	"modules-right": [
+		"power-profiles-daemon",
 		"pulseaudio",
 		"bluetooth",
 		"network",
@@ -81,7 +82,7 @@
 		"on-click": "pavucontrol"
 	},
 	"custom/power": {
-		"format" : "⏻",
+		"format" : " ⏻ ",
 		"tooltip": false,
 		"menu": "on-click",
 		"menu-file": "$HOME/.config/waybar/power_menu.xml", // Menu file in resources folder
@@ -102,5 +103,11 @@
 		"tooltip-format-enumerate-connected-battery": "{device_alias}\t{device_address}\t{device_battery_percentage}%",
 		"on-click": "blueman-manager"
 		// "format-device-preference": [ "device1", "device2" ], // preference list deciding the displayed device
+	},
+	"power-profiles-daemon": {
+		"format": " {icon} ",
+		"format-icons": {
+			"performance": "", "balanced": "", "power-saver": ""
+		}
 	}
 }

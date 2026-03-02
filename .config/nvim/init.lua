@@ -48,8 +48,6 @@ map("n", "<M-k>", "<cmd>cprev<CR>")
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 map("n", "<Esc>", "<cmd>nohlsearch<CR>")
-
-map("n", "<leader>q", vim.diagnostic.setqflist)
 -- exit terminal mode
 map("t", "<Esc><Esc>", "<C-\\><C-n>")
 
@@ -123,6 +121,25 @@ require("vague").setup({
 	italic = false,
 })
 
+vim.lsp.config("tinymist", {
+	settings = {
+		formatterMode = "typstyle", -- enables formatting
+	},
+})
+
+map("n", "<leader>tp", function()
+	local clients = vim.lsp.get_clients({ name = "tinymist" })
+	if #clients > 0 then
+		clients[1]:exec_cmd({
+			command = "tinymist.startDefaultPreview",
+			arguments = { vim.api.nvim_buf_get_name(0) }, -- Pass current file
+			title = "Typst Preview",
+		})
+	else
+		print("Tinymist not active")
+	end
+end, { desc = "Typst Preview" })
+
 vim.lsp.enable({
 	"lua_ls",
 	"clangd",
@@ -144,7 +161,7 @@ vim.diagnostic.config({
 			[vim.diagnostic.severity.HINT] = "󰌶 ",
 		},
 	},
-	virtual_text = { severity = vim.diagnostic.severity.ERROR },
+	virtual_text = { severity = vim.diagnostic.severity.WARN },
 })
 
 vim.cmd("colorscheme vague")
@@ -244,34 +261,41 @@ local function typst_open_file()
 end
 
 local function typst_watch_file()
-	if not term_state.typst.is_watching then
-		local filepath = vim.api.nvim_buf_get_name(0)
-		local filename = vim.fs.basename(filepath)
-		local dir = vim.fs.dirname(filepath)
-		local dirname = vim.fs.basename(dir)
-		local output = dir .. '/' .. dirname .. '-' .. string.gsub(filename, ".typ", ".pdf")
-
-		if not string.find(filename, ".typ") then
-			print("Unable to watch file, File is not a typst file")
-			return
+	--  check and kill the old job first if it exists
+	if term_state.typst.is_watching then
+		-- Kill the actual OS process
+		if term_state.job_id > 0 then
+			vim.fn.jobstop(term_state.job_id)
+			term_state.job_id = 0
 		end
-		term_state.floating = create_terminal({ buf = term_state.floating.buf })
-		if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
-			vim.cmd.term()
-			term_state.job_id = vim.bo.channel
+		-- Clean up the buffer
+		if vim.api.nvim_buf_is_valid(term_state.floating.buf) then
+			vim.api.nvim_buf_delete(term_state.floating.buf, { force = true })
 		end
-		local cmd = "typst watch " .. filepath .. " " .. output .. "\r\n"
-		vim.fn.chansend(term_state.job_id, { cmd })
-		term_state.typst.is_watching = true
-	else
-		vim.api.nvim_buf_delete(term_state.floating.buf, { force = true })
 		term_state.typst.is_watching = false
-		typst_watch_file()
 	end
+	local filepath = vim.api.nvim_buf_get_name(0)
+	local filename = vim.fs.basename(filepath)
+	local dir = vim.fs.dirname(filepath)
+	local dirname = vim.fs.basename(dir)
+	local output = dir .. '/' .. dirname .. '-' .. string.gsub(filename, ".typ", ".pdf")
+
+	if not string.find(filename, ".typ") then
+		print("Unable to watch file, File is not a typst file")
+		return
+	end
+	term_state.floating = create_terminal({ buf = term_state.floating.buf })
+	if vim.bo[term_state.floating.buf].buftype ~= "terminal" then
+		vim.cmd.term()
+		term_state.job_id = vim.bo.channel
+	end
+	local cmd = "typst watch " .. filepath .. " " .. output .. "\r\n"
+	vim.fn.chansend(term_state.job_id, { cmd })
+	term_state.typst.is_watching = true
 end
 
 map({ "n", "t" }, "<C-;>", toggle_term)
 map("n", "<leader>tw", typst_watch_file)
 map("n", "<leader>to", typst_open_file)
 -- making current file executable
-vim.api.nvim_create_user_command("Chmod", "!chmod +x %<CR>", {})
+vim.api.nvim_create_user_command("Chmod", "!chmod +x %", {})
