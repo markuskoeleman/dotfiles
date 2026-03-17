@@ -1,0 +1,6 @@
+set font "JetBrains Mono 10"
+set recolor-keephue true
+set scroll-page-aware true
+set guioptions ""
+set selection-clipboard clipboard
+set highlight-fg "#000000"

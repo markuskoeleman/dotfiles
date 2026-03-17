@@ -125,7 +125,7 @@ vim.lsp.config("tinymist", {
 	settings = {
 		formatterMode = "typstyle", -- enables formatting
 		formatterPrintWidth = 100,
-        formatterProseWrap = true,
+		formatterProseWrap = true,
 	},
 })
 
@@ -163,7 +163,7 @@ vim.diagnostic.config({
 			[vim.diagnostic.severity.HINT] = "󰌶 ",
 		},
 	},
-	virtual_text = { severity =  { min = vim.diagnostic.severity.WARN} },
+	virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
 })
 
 vim.cmd("colorscheme vague")
