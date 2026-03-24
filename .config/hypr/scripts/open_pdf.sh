@@ -14,4 +14,6 @@ if [[ -z $selected ]]; then
     exit 1
 fi
 
-tmux new-session -d zathura $selected
+# hyprctl dispatch exec "zathura '$selected'"
+
+hyprctl dispatch exec "sioyek --new-window '$selected'"
