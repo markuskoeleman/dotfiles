@@ -15,5 +15,4 @@ if [[ -z $selected ]]; then
 fi
 
 # hyprctl dispatch exec "zathura '$selected'"
-
 hyprctl dispatch exec "sioyek --new-window '$selected'"
