@@ -57,7 +57,6 @@ map('x', "K", ":m '<-2<CR>gv=gv")
 
 vim.pack.add({
 	{ src = "https://github.com/vague-theme/vague.nvim" },
-	{ src = "https://github.com/neovim/nvim-lspconfig" },
 	{ src = 'https://github.com/Saghen/blink.cmp',      version = vim.version.range('*') },
 	{ src = "https://github.com/nvim-mini/mini.nvim" },
 	{ src = "https://github.com/folke/flash.nvim" },
@@ -121,32 +120,10 @@ require("vague").setup({
 	italic = false,
 })
 
-vim.lsp.config("tinymist", {
-	settings = {
-		formatterMode = "typstyle", -- enables formatting
-		formatterPrintWidth = 100,
-		formatterProseWrap = true,
-	},
-})
-
-map("n", "<leader>tp", function()
-	local clients = vim.lsp.get_clients({ name = "tinymist" })
-	if #clients > 0 then
-		clients[1]:exec_cmd({
-			command = "tinymist.startDefaultPreview",
-			arguments = { vim.api.nvim_buf_get_name(0) }, -- Pass current file
-			title = "Typst Preview",
-		})
-	else
-		print("Tinymist not active")
-	end
-end, { desc = "Typst Preview" })
-
 vim.lsp.enable({
 	"lua_ls",
 	"clangd",
 	"rust_analyzer",
-	"zls",
 	"pyright",
 	"tinymist",
 })
@@ -172,6 +149,19 @@ vim.cmd("colorscheme vague")
 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", {})
 -- wanted to make the flash labels a little more visible
 vim.api.nvim_set_hl(0, "FlashLabel", { bg = "#CC0066", fg = "#FFFFFF" })
+
+-- tinymist live preview
+map("n", "<leader>tp", function()
+	local clients = vim.lsp.get_clients({ name = "tinymist" })
+	if #clients > 0 then
+		clients[1]:exec_cmd({
+			command = "tinymist.startDefaultPreview",
+			title = "Tinymist Preview",
+		})
+	else
+		print("Tinymist not active")
+	end
+end, { desc = "Typst Preview" })
 
 map({ "n", "x", "o" }, "s", require("flash").jump)
 
