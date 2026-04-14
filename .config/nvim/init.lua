@@ -213,7 +213,7 @@ local function create_terminal(state)
 		buf = vim.api.nvim_create_buf(false, true)
 	end
 
-	local win = vim.api.nvim_open_win(buf, true, {
+	local win = vim.api.nvim_open_win(buf --[[@as integer]], true, {
 		relative = "editor",
 		width = vim.api.nvim_win_get_width(0),
 		height = vim.api.nvim_win_get_height(0),
