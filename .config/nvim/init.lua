@@ -55,6 +55,11 @@ map("t", "<Esc><Esc>", "<C-\\><C-n>")
 map('x', "J", ":m '>+1<cr>gv=gv")
 map('x', "K", ":m '<-2<CR>gv=gv")
 
+-- leader + num to switch tabs
+for i=1, 9 do
+	map({"n", "t"}, "<leader>" .. i, "<cmd>tabnext " .. i .. "<CR>")
+end
+
 vim.pack.add({
 	{ src = "https://github.com/vague-theme/vague.nvim" },
 	{ src = 'https://github.com/Saghen/blink.cmp',      version = vim.version.range('*') },
