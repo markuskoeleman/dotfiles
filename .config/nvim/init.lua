@@ -57,7 +57,7 @@ map('x', "K", ":m '<-2<CR>gv=gv")
 
 -- leader + num to switch tabs
 for i=1, 9 do
-	map({"n", "t"}, "<leader>" .. i, "<cmd>tabnext " .. i .. "<CR>")
+	map({"n"}, "<leader>" .. i, "<cmd>tabnext " .. i .. "<CR>")
 end
 
 vim.pack.add({
@@ -131,6 +131,8 @@ vim.lsp.enable({
 	"rust_analyzer",
 	"pyright",
 	"tinymist",
+	"gdscript",
+	"zls",
 })
 
 vim.diagnostic.config({
