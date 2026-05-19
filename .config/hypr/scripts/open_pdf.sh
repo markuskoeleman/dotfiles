@@ -14,4 +14,4 @@ if [[ -z $selected ]]; then
     exit 1
 fi
 
-hyprctl dispatch "hl.dsp.exec_cmd('sioyek --new-window \"$selected\"')"
+hyprctl eval "hl.exec_cmd('sioyek --new-window \"$selected\"')"
