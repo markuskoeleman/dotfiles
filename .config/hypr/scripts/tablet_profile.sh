@@ -12,7 +12,7 @@ CURRENT_PORT=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .na
 # 3. Decision Logic
 if [ -n "$ULTRAWIDE_PORT" ]; then
     # THE ULTRAWIDE IS CONNECTED
-    LAST_STATE=$(cat "$STATE_FILE" 2>/dev/null || echo "right")
+    LAST_STATE=$(cat "$STATE_FILE" 2>/dev/null || echo "left")
 
     if [ "$LAST_STATE" = "left" ]; then
         hyprctl eval "hl.device({
@@ -20,8 +20,6 @@ if [ -n "$ULTRAWIDE_PORT" ]; then
             output = '$ULTRAWIDE_PORT',
             region_size = {2304, 1440},
             region_position = {1136, 0},
-            active_area_size = {0, 0},
-            active_area_position = {0, 0}
         })"
         echo "right" > "$STATE_FILE"
         notify-send "Tablet Profile" "Ultrawide: Right-Aligned Workspace"
@@ -31,8 +29,6 @@ if [ -n "$ULTRAWIDE_PORT" ]; then
             output = '$ULTRAWIDE_PORT',
             region_size = {2304, 1440},
             region_position = {0, 0},
-            active_area_size = {0, 0},
-            active_area_position = {0, 0}
         })"
         echo "left" > "$STATE_FILE"
         notify-send "Tablet Profile" "Ultrawide: Left-Aligned Workspace"
@@ -42,8 +38,6 @@ else
     hyprctl eval "hl.device({
         name = '$TABLET',
         output = '$CURRENT_PORT',
-        region_size = {0, 0},
-        region_position = {0, 0},
         active_area_size = {160, 90},
         active_area_position = {0, 5}
     })"

@@ -14,5 +14,4 @@ if [[ -z $selected ]]; then
     exit 1
 fi
 
-# hyprctl dispatch exec "zathura '$selected'"
-hyprctl dispatch exec "sioyek --new-window '$selected'"
+hyprctl dispatch "hl.dsp.exec_cmd('sioyek --new-window \"$selected\"')"

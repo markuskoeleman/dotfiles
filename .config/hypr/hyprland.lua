@@ -234,18 +234,109 @@ hl.gesture({
 -- TABLETS
 hl.device({
 	name = "xp-pen-star-g640",
-	region_size = { 0, 0 },
-	region_position = { 0, 0 },
 	active_area_size = { 160, 90 },
 	active_area_position = { 0, 5 },
 })
 
+local TABLET = "xp-pen-star-g640"
+local STATE_FILE = "/tmp/tablet_ultrawide_side"
+
+local function toggle_tablet_profile()
+	-- 1. Grab all connected monitors natively
+	local monitors = hl.get_monitors()
+	local ultrawide_port = nil
+
+	-- Find the port hosting the 3440x1440 resolution
+	for _, m in ipairs(monitors) do
+		if m.width == 3440 and m.height == 1440 then
+			ultrawide_port = m.name
+			break
+		end
+	end
+
+	-- 2. Decision Logic
+	if ultrawide_port then
+		-- THE ULTRAWIDE IS CONNECTED
+		-- Read last state from the file tracker safely
+		local f = io.open(STATE_FILE, "r")
+		local last_state = "left"
+		if f then
+			last_state = f:read("*a"):match("%w+") or "left" -- Robustly extracts just the word
+			f:close()
+		end
+
+		if last_state == "left" then
+			hl.device({
+				name = TABLET,
+				output = ultrawide_port,
+				region_size = { 2304, 1440 },
+				region_position = { 1136, 0 },
+			})
+
+			-- Update state file
+			local f_write = io.open(STATE_FILE, "w")
+			if f_write then
+				f_write:write("right")
+				f_write:close()
+			end
+
+			hl.notification.create({
+				text = "Ultrawide: Right-Aligned Workspace",
+				timeout = 3000,
+				icon = "ok"
+			})
+		else
+			hl.device({
+				name = TABLET,
+				output = ultrawide_port,
+				region_size = { 2304, 1440 },
+				region_position = { 0, 0 },
+			})
+
+			-- Update state file
+			local f_write = io.open(STATE_FILE, "w")
+			if f_write then
+				f_write:write("left")
+				f_write:close()
+			end
+
+			hl.notification.create({
+				text = "Ultrawide: Left-Aligned Workspace",
+				timeout = 3000,
+				icon = "ok"
+			})
+		end
+	else
+		-- 3. UNIVERSAL 16:9 FALLBACK
+		-- Grab the name of the currently focused monitor natively
+		local current_port = "eDP-1" -- Safe baseline fallback
+		local active_monitor = hl.get_active_monitor()
+		if active_monitor then
+			current_port = active_monitor.name
+		end
+
+		hl.device({
+			name = TABLET,
+			output = current_port,
+			active_area_size = { 160, 90 },
+			active_area_position = { 0, 5 }
+		})
+
+		hl.notification.create({
+			text = "Standard 16:9 Aspect Ratio Mode",
+			timeout = 3000,
+			icon = "ok"
+		})
+	end
+end
 
 ---------------------
 ---- KEYBINDINGS ----
 ---------------------
 
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
+
+hl.bind(mainMod .. " + Y", toggle_tablet_profile);
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
