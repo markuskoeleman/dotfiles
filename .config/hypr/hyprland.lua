@@ -238,11 +238,17 @@ hl.device({
 	active_area_position = { 0, 5 },
 })
 
-local TABLET = "xp-pen-star-g640"
+hl.device({
+	name = "hanvon-ugee-deco-lw-pen",
+	active_area_size = { 254, 142.875 }, -- Spans full width; scales height down to perfect 16:9
+	active_area_position = { 0, 4.76 }  -- Vertically centers the active area on your 152
+})
+
+local TABLET = "hanvon-ugee-deco-lw-pen"
 local STATE_FILE = "/tmp/tablet_ultrawide_side"
 
 local function toggle_tablet_profile()
-	-- 1. Grab all connected monitors natively
+	-- Grab all connected monitors natively
 	local monitors = hl.get_monitors()
 	local ultrawide_port = nil
 
@@ -254,7 +260,7 @@ local function toggle_tablet_profile()
 		end
 	end
 
-	-- 2. Decision Logic
+	-- Decision Logic
 	if ultrawide_port then
 		-- THE ULTRAWIDE IS CONNECTED
 		-- Read last state from the file tracker safely
@@ -269,8 +275,8 @@ local function toggle_tablet_profile()
 			hl.device({
 				name = TABLET,
 				output = ultrawide_port,
-				region_size = { 2304, 1440 },
-				region_position = { 1136, 0 },
+				region_size = { 2400, 1440 },
+				region_position = { 1040, 0 },
 			})
 
 			-- Update state file
@@ -289,7 +295,7 @@ local function toggle_tablet_profile()
 			hl.device({
 				name = TABLET,
 				output = ultrawide_port,
-				region_size = { 2304, 1440 },
+				region_size = { 2400, 1440 },
 				region_position = { 0, 0 },
 			})
 
@@ -307,7 +313,7 @@ local function toggle_tablet_profile()
 			})
 		end
 	else
-		-- 3. UNIVERSAL 16:9 FALLBACK
+		-- UNIVERSAL 16:9 FALLBACK
 		-- Grab the name of the currently focused monitor natively
 		local current_port = "eDP-1" -- Safe baseline fallback
 		local active_monitor = hl.get_active_monitor()
@@ -318,8 +324,8 @@ local function toggle_tablet_profile()
 		hl.device({
 			name = TABLET,
 			output = current_port,
-			active_area_size = { 160, 90 },
-			active_area_position = { 0, 5 }
+			active_area_size = { 254, 142.875 }, -- Spans full width; scales height down to perfect 16:9
+			active_area_position = { 0, 4.76 } -- Vertically centers the active area on your 152
 		})
 
 		hl.notification.create({
@@ -350,6 +356,8 @@ hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu))
 hl.bind(mainMod .. " + P", hl.dsp.window.pseudo())
 hl.bind(mainMod .. " + U", hl.dsp.layout("togglesplit")) -- dwindle only
 
+-- fullscreen
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "fullscreen", action = "toggle" }))
 -- Reset DE
 hl.bind(mainMod .. " + R", function()
 	hl.exec_cmd("pkill waybar; pkill hyprpaper; waybar & hyprpaper")

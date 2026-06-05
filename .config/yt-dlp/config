@@ -1,0 +1,17 @@
+# --- QUALITY & FORMATS ---
+# Always prefer 1080p or lower, merge with best audio
+-f "bestvideo[height<=1080]+bestaudio/best"
+# Merge everything into a standard MP4 container
+# --merge-output-format mp4
+
+# 3. Strips out illegal characters (like ?, :, |) to ensure clean paths
+--restrict-filenames
+# --- EMBEDDING & EXTRAS ---
+#
+# # Embed the native thumbnail directly into the MKV
+--embed-thumbnail
+--convert-thumbnails jpg
+
+# Embed English subtitles cleanly
+--embed-subs
+--sub-langs "en,en-orig"
