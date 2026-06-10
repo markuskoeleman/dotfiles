@@ -25,7 +25,8 @@
 		}
 	},
 	"clock": {
-		"tooltip": false
+		"tooltip": false,
+		"format-alt": "{:%a, %d %b  %H:%M}"
 	},
 	"cpu": {
 		"format": "{usage}% ",
