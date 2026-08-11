@@ -54,14 +54,12 @@ map("t", "<Esc><Esc>", "<C-\\><C-n>")
 -- Move selected lines in visual mode
 map('x', "J", ":m '>+1<cr>gv=gv")
 map('x', "K", ":m '<-2<CR>gv=gv")
-
 -- leader + num to switch tabs
 for i=1, 9 do
 	map({"n"}, "<leader>" .. i, "<cmd>tabnext " .. i .. "<CR>")
 end
 
 vim.pack.add({
-	{ src = "https://github.com/dchinmay2/alabaster.nvim" },
 	{ src = 'https://github.com/Saghen/blink.cmp',      version = vim.version.range('*') },
 	{ src = "https://github.com/nvim-mini/mini.nvim" },
 	{ src = "https://github.com/folke/flash.nvim" },
@@ -119,7 +117,6 @@ require("flash").setup({
 		},
 	},
 })
-
 vim.lsp.enable({
 	"lua_ls",
 	"clangd",
@@ -129,7 +126,6 @@ vim.lsp.enable({
 	"gdscript",
 	"zls",
 })
-
 vim.diagnostic.config({
 	severity_sort = true,
 	float = { border = "rounded", source = "if_many" },
@@ -149,6 +145,13 @@ vim.diagnostic.config({
 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", {})
 -- wanted to make the flash labels a little more visible
 vim.api.nvim_set_hl(0, "FlashLabel", { bg = "#CC0066", fg = "#FFFFFF" })
+
+-- highlight after yanking
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+})
 
 -- tinymist live preview
 map("n", "<leader>tp", function()

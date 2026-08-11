@@ -10,3 +10,7 @@ vertical = false
 fit_height = "a"
 fit_width = "s"
 picker_highlight_search = "ctrl+H"
+
+[behavior]
+dont_invert_images = false
+
