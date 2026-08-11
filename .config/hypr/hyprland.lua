@@ -87,6 +87,7 @@ hl.env("XCURSOR_SIZE", "24")
 hl.env("HYPRCURSOR_SIZE", "24")
 
 hl.env("GTK_THEME", "Dracula")
+hl.env("QT_QPA_PLATFORMTHEME", "qt6ct")
 
 
 -----------------------
@@ -204,7 +205,7 @@ hl.config({
 		kb_layout    = "us",
 		kb_variant   = "",
 		kb_model     = "",
-		kb_options   = "caps:swapescape,compose:ralt",
+		kb_options   = "compose:ralt",
 		kb_rules     = "",
 
 		follow_mouse = 1,

@@ -1,0 +1,4 @@
+[mgr]
+prepend_keymap = [
+    { on = "T", run = "shell --orphan 'foot -D %d'", desc = "Open terminal in current dir" }
+]

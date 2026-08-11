@@ -14,4 +14,6 @@ if [[ -z $selected ]]; then
     exit 1
 fi
 
-hyprctl eval "hl.exec_cmd('sioyek --new-window \"$selected\"')"
+# hyprctl eval "hl.exec_cmd('sioyek --new-window \"$selected\"')"
+
+lektra $selected

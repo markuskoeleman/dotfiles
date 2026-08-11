@@ -61,7 +61,7 @@ for i=1, 9 do
 end
 
 vim.pack.add({
-	{ src = "https://github.com/vague-theme/vague.nvim" },
+	{ src = "https://github.com/dchinmay2/alabaster.nvim" },
 	{ src = 'https://github.com/Saghen/blink.cmp',      version = vim.version.range('*') },
 	{ src = "https://github.com/nvim-mini/mini.nvim" },
 	{ src = "https://github.com/folke/flash.nvim" },
@@ -119,11 +119,6 @@ require("flash").setup({
 		},
 	},
 })
-require("vague").setup({
-	transparent = true,
-	bold = false,
-	italic = false,
-})
 
 vim.lsp.enable({
 	"lua_ls",
@@ -149,8 +144,6 @@ vim.diagnostic.config({
 	},
 	virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
 })
-
-vim.cmd("colorscheme vague")
 
 -- disable greying out unsused
 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", {})
