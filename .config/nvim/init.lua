@@ -141,6 +141,8 @@ vim.diagnostic.config({
 	virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
 })
 
+vim.cmd.colorscheme("github")
+
 -- disable greying out unsused
 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", {})
 -- wanted to make the flash labels a little more visible
@@ -152,6 +154,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.highlight.on_yank()
 	end,
 })
+
+map('n', 'gd', vim.lsp.buf.definition, { desc = "LSP Goto Definition" })
 
 -- tinymist live preview
 map("n", "<leader>tp", function()

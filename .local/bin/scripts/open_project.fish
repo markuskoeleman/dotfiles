@@ -9,7 +9,7 @@
 
 # Only searches with a depth of 1 so you'll need to specify all the dirs where projects could be located
 set selected (
-find ~/uni/pogramaermethodeiken/ ~/uni/maths ~/uni/physics ~/coding ~/.dotfiles/.config ~/.dotfiles/.local/bin -mindepth 1 -maxdepth 1 -type d -not -name '.*'|
+find ~/uni/programeermethoden/ ~/uni/maths ~/coding ~/.dotfiles/.config ~/.dotfiles/.local/bin -mindepth 1 -maxdepth 1 -type d -not -name '.*'|
 	sed "s|^$HOME/||" |
 	fzf
 )
