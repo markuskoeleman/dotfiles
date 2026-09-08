@@ -3,17 +3,8 @@ sort_dir_first = true
 sort_reverse = false
 sort_by = "natural"
 
-
-# kinda stupid workaround rnote "FILE_NAME" always opens the file in the most recent window
-# Might stop working in the future for that reason
-# [[opener.rnote]]
-# run = 'gapplication action com.github.flxzt.rnote new-window && rnote "$@"'
-# orphan = true
-# for = "unix"
-
-# if rnote is not already running start it up
 [[opener.rnote]]
-run = 'sh -c "if gapplication action com.github.flxzt.rnote new-window 2>/dev/null; then sleep 0.05; fi; rnote \"\$@\"" -- "$@"'
+run = '''sh -c 'if gapplication action com.github.flxzt.rnote new-window 2>/dev/null; then sleep 0.05; fi; rnote "$@"' -- %s'''
 orphan = true
 for = "unix"
 
