@@ -347,14 +347,17 @@ local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 hl.window_rule({
   match = { class = "scratchpad_notes" },
   float = true,
-  size = { 900, 600 },
+  size = { 900, 900 },
   center = true,
 })
 
-hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("foot -a scratchpad_notes sh -c 'mkdir -p ~/.cache/todoscratch && nvim ~/.cache/todoscratch/$(date +%Y-%m-%d).md'"))
+hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("foot --app-id=scratchpad_notes -w 900x900 nvim ~/.cache/todoscratch/$(date +%Y-%m-%d).md"))
+
+-- hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("foot -a scratchpad_notes sh -c 'mkdir -p ~/.cache/todoscratch && nvim ~/.cache/todoscratch/$(date +%Y-%m-%d).md'"))
 
 hl.bind(mainMod .. " + Y", toggle_tablet_profile);
-hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(terminal .. " -e " .. fileManager .. " ~/uni/rnote/"))
+hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(terminal .. " -e ~/.config/hypr/scripts/open_rnote.sh"))
+-- hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(terminal .. " -e " .. fileManager .. " ~/uni/rnote/"))
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
