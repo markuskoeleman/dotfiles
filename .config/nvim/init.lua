@@ -198,6 +198,10 @@ map("n", "<leader>sp", function()
 	})
 end)
 
+map("n", "<leader>st", function()
+	require("mini.extra").pickers.explorer({ cwd = "/home/markus/.cache/todoscratch" })
+end)
+
 map("n", "<leader>e", require("mini.files").open)
 
 -- fullscreen terminal
@@ -298,3 +302,39 @@ map("n", "<leader>tw", typst_watch_file)
 map("n", "<leader>to", typst_open_file)
 -- making current file executable
 vim.api.nvim_create_user_command("Chmod", "!chmod +x %", {})
+
+-- handy todo togle add -> - [] to the line or toggle - [x]
+local function toggle_line(line)
+  if line:find('%[% %]') then
+    return (line:gsub('%[% %]', '[x]', 1))
+  elseif line:find('%[x%]') then
+    return (line:gsub('%[%x%]', '[ ]', 1))
+  elseif line:match('%S') then
+    -- Preserve leading indentation if present
+    local indent, content = line:match('^(%s*)(.*)$')
+    return indent .. '- [ ] ' .. content
+  else
+    return line
+  end
+end
+
+-- Normal mode: Toggle current line
+vim.keymap.set('n', '<leader>x', function()
+  local line = vim.api.nvim_get_current_line()
+  vim.api.nvim_set_current_line(toggle_line(line))
+end, { desc = "Toggle checkbox" })
+
+-- Visual mode: Toggle all highlighted lines
+vim.keymap.set('v', '<leader>x', function()
+  local start_line = vim.fn.line('v')
+  local end_line = vim.fn.line('.')
+  if start_line > end_line then
+    start_line, end_line = end_line, start_line
+  end
+
+  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+  for i, line in ipairs(lines) do
+    lines[i] = toggle_line(line)
+  end
+  vim.api.nvim_buf_set_lines(0, start_line - 1, end_line, false, lines)
+end, { desc = "Toggle checkboxes on selection" })

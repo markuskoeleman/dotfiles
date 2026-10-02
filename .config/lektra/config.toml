@@ -10,7 +10,14 @@ vertical = false
 fit_height = "a"
 fit_width = "s"
 picker_highlight_search = "ctrl+H"
+statusbar = "ctrl+N"
 
 [behavior]
 dont_invert_images = false
 
+[window]
+menubar = false
+bg = "#000000"
+
+[statusbar]
+visible = false
