@@ -16,7 +16,8 @@ from typing import Any
 # Configuration
 # ---------------------------------------------------------------------------
 
-DEFAULT_FILTER = ["project:brightspace", "status:pending"]
+# DEFAULT_FILTER = ["project:brightspace", "status:pending"] # uncomment if you only want brightspace tasks
+DEFAULT_FILTER = ["status:pending"]
 
 # Taskwarrior's DUE virtual tag is controlled by the `due` setting and is
 # seven days by default. We read the user's actual setting when possible.
@@ -1099,7 +1100,7 @@ def main() -> int:
         nargs="*",
         help=(
             "Taskwarrior filter. Defaults to: "
-            "project:brightspace status:pending"
+            "status:pending"
         ),
     )
 
