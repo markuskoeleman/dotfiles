@@ -1,0 +1,39 @@
+# [Created by task 3.5.0 9/29/2026 16:44:10]
+data.location=/home/markus/.task
+news.version=3.5.0
+
+# To use the default location of the XDG directories,
+# move this configuration file from ~/.taskrc to ~/.config/task/taskrc and update location config as follows:
+
+#data.location=~/.local/share/task
+#hooks.location=~/.config/task/hooks
+
+# Color theme (uncomment one to use)
+include default.theme
+#include light-16.theme
+#include light-256.theme
+#include bubblegum-256.theme
+#include dark-16.theme
+#include dark-256.theme
+#include dark-red-256.theme
+#include dark-green-256.theme
+#include dark-blue-256.theme
+#include dark-violets-256.theme
+#include dark-yellow-green.theme
+#include dark-gray-256.theme
+#include dark-gray-blue-256.theme
+#include solarized-dark-256.theme
+#include solarized-light-256.theme
+#include no-color.theme
+
+uda.brightspace_uid.type=string
+uda.brightspace_uid.label=Brightspace UID
+
+uda.brightspace_description.type=string
+uda.brightspace_description.label=Brightspace Description
+
+uda.brightspace_url.type=string
+uda.brightspace_url.label=Brightspace URL
+
+uda.brightspace_materials.type=string
+uda.brightspace_materials.label=Materials URL

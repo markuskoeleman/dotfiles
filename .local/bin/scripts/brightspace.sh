@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ICS_URL="https://brightspace.universiteitleiden.nl/d2l/le/calendar/feed/user/feed.ics?token=aare3dz7mbcuxk5m2b247"
+: "${BRIGHTSPACE_ICS_URL:?BRIGHTSPACE_ICS_URL is not set}"
+
+ICS_URL="$BRIGHTSPACE_ICS_URL"
 PROJECT="brightspace"
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
