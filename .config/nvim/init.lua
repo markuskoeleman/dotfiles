@@ -55,12 +55,12 @@ map("t", "<Esc><Esc>", "<C-\\><C-n>")
 map('x', "J", ":m '>+1<cr>gv=gv")
 map('x', "K", ":m '<-2<CR>gv=gv")
 -- leader + num to switch tabs
-for i=1, 9 do
-	map({"n"}, "<leader>" .. i, "<cmd>tabnext " .. i .. "<CR>")
+for i = 1, 9 do
+	map({ "n" }, "<leader>" .. i, "<cmd>tabnext " .. i .. "<CR>")
 end
 
 vim.pack.add({
-	{ src = 'https://github.com/Saghen/blink.cmp',      version = vim.version.range('*') },
+	{ src = 'https://github.com/Saghen/blink.cmp',   version = vim.version.range('*') },
 	{ src = "https://github.com/nvim-mini/mini.nvim" },
 	{ src = "https://github.com/folke/flash.nvim" },
 })
@@ -292,7 +292,12 @@ local function typst_watch_file()
 		vim.cmd.term()
 		term_state.job_id = vim.bo.channel
 	end
-	local cmd = "typst watch " .. filepath .. " " .. output .. "\r\n"
+	local assignment = vim.fn.fnamemodify(filepath, ":t:r")
+	local cmd = ("typst watch --input %s %s %s\r\n"):format(
+		vim.fn.shellescape("assignment=" .. assignment),
+		vim.fn.shellescape(filepath),
+		vim.fn.shellescape(output)
+	)
 	vim.fn.chansend(term_state.job_id, { cmd })
 	term_state.typst.is_watching = true
 end
@@ -305,36 +310,36 @@ vim.api.nvim_create_user_command("Chmod", "!chmod +x %", {})
 
 -- handy todo togle add -> - [] to the line or toggle - [x]
 local function toggle_line(line)
-  if line:find('%[% %]') then
-    return (line:gsub('%[% %]', '[x]', 1))
-  elseif line:find('%[x%]') then
-    return (line:gsub('%[%x%]', '[ ]', 1))
-  elseif line:match('%S') then
-    -- Preserve leading indentation if present
-    local indent, content = line:match('^(%s*)(.*)$')
-    return indent .. '- [ ] ' .. content
-  else
-    return line
-  end
+	if line:find('%[% %]') then
+		return (line:gsub('%[% %]', '[x]', 1))
+	elseif line:find('%[x%]') then
+		return (line:gsub('%[%x%]', '[ ]', 1))
+	elseif line:match('%S') then
+		-- Preserve leading indentation if present
+		local indent, content = line:match('^(%s*)(.*)$')
+		return indent .. '- [ ] ' .. content
+	else
+		return line
+	end
 end
 
 -- Normal mode: Toggle current line
 vim.keymap.set('n', '<leader>x', function()
-  local line = vim.api.nvim_get_current_line()
-  vim.api.nvim_set_current_line(toggle_line(line))
+	local line = vim.api.nvim_get_current_line()
+	vim.api.nvim_set_current_line(toggle_line(line))
 end, { desc = "Toggle checkbox" })
 
 -- Visual mode: Toggle all highlighted lines
 vim.keymap.set('v', '<leader>x', function()
-  local start_line = vim.fn.line('v')
-  local end_line = vim.fn.line('.')
-  if start_line > end_line then
-    start_line, end_line = end_line, start_line
-  end
+	local start_line = vim.fn.line('v')
+	local end_line = vim.fn.line('.')
+	if start_line > end_line then
+		start_line, end_line = end_line, start_line
+	end
 
-  local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
-  for i, line in ipairs(lines) do
-    lines[i] = toggle_line(line)
-  end
-  vim.api.nvim_buf_set_lines(0, start_line - 1, end_line, false, lines)
+	local lines = vim.api.nvim_buf_get_lines(0, start_line - 1, end_line, false)
+	for i, line in ipairs(lines) do
+		lines[i] = toggle_line(line)
+	end
+	vim.api.nvim_buf_set_lines(0, start_line - 1, end_line, false, lines)
 end, { desc = "Toggle checkboxes on selection" })
