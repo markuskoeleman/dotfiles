@@ -7,3 +7,11 @@ set highlight-fg "#000000"
 
 
 map W exec ".config/zathura/zathura-clone.sh $FILE"
+
+map i recolor
+
+map j navigate next
+map J scroll down
+map k navigate previous
+map K scroll up
+

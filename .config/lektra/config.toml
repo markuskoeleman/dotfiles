@@ -7,17 +7,30 @@ vertical = false
 
 
 [keybindings]
-fit_height = "a"
+fit_height = '0'
+fit_height_smart = "a"
 fit_width = "s"
 picker_highlight_search = "ctrl+H"
 statusbar = "ctrl+N"
+page_next = 'j'
+page_prev = 'k'
+scroll_down = 'shift+J'
+scroll_up = 'shift+K'
 
 [behavior]
 dont_invert_images = false
 
 [window]
-menubar = false
 bg = "#000000"
 
+[menubar]
+show = false
+
 [statusbar]
-visible = false
+show = false
+
+[minimap]
+enabled = false
+
+[preview]
+size_ratio = {width = 1, height=0.8}
