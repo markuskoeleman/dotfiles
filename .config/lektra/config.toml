@@ -16,6 +16,7 @@ page_next = 'j'
 page_prev = 'k'
 scroll_down = 'shift+J'
 scroll_up = 'shift+K'
+preview = 'u'
 
 [behavior]
 dont_invert_images = false
@@ -34,3 +35,6 @@ enabled = false
 
 [preview]
 size_ratio = {width = 1, height=0.8}
+
+[link_hints]
+charset = "asdfghjklqwertyuiopzxcvbnm;123456789"
