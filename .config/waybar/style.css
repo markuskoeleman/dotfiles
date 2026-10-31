@@ -92,3 +92,9 @@ button:hover {
 
 #custom-power:hover { background: #e75994; }
 #power-profiles-daemon:hover { background: #C2438C; } 
+
+#custom-study.running {
+    color: #ff5555;
+    font-weight: bold;
+    padding: 0 8px;
+}

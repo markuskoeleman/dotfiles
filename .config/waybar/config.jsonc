@@ -4,6 +4,7 @@
 		"hyprland/workspaces"
 	],
 	"modules-center": [        
+		"custom/study",
 		"clock"
 	],
 	"modules-right": [
@@ -110,5 +111,15 @@
 		"format-icons": {
 			"performance": "", "balanced": "", "power-saver": ""
 		}
+	},
+
+	// custom Study status tracker.
+	"custom/study": {
+		"exec": "$HOME/.local/bin/scripts/study-status.py",
+		"return-type": "json",
+		"signal": 8,
+		"format": "{}",
+		"hide-empty-text": true,
+		"tooltip": false
 	}
 }

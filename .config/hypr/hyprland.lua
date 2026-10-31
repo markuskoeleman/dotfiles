@@ -351,7 +351,21 @@ hl.window_rule({
   center = true,
 })
 
+hl.window_rule({
+    name = "study-timer-float",
+    match = { class = "^study_timer$" },
+    float = true,
+    center = true,
+    size = { 900, 900 },
+})
+
+hl.bind(mainMod .. " + M", hl.dsp.exec_cmd(
+    'foot --app-id=study_timer -w 900x900 python3 "$HOME/.local/bin/scripts/study.py"'
+))
+
 hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("foot --app-id=scratchpad_notes -w 900x900 nvim ~/.cache/todoscratch/$(date +%Y-%m-%d).md"))
+
+
 
 -- hl.bind(mainMod .. " + T", hl.dsp.exec_cmd("foot -a scratchpad_notes sh -c 'mkdir -p ~/.cache/todoscratch && nvim ~/.cache/todoscratch/$(date +%Y-%m-%d).md'"))
 
@@ -362,8 +376,8 @@ hl.bind(mainMod .. " + N", hl.dsp.exec_cmd(terminal .. " -e ~/.config/hypr/scrip
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
 hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 hl.bind(mainMod .. " + Q", hl.dsp.window.close())
-hl.bind(mainMod .. " + M",
-	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
+-- hl.bind(mainMod .. " + M",
+-- 	hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + E", hl.dsp.exec_cmd(terminal .. " -e " .. fileManager))
 hl.bind(mainMod .. " + B", hl.dsp.exec_cmd(browser))
 hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
