@@ -293,8 +293,9 @@ local function typst_watch_file()
 		term_state.job_id = vim.bo.channel
 	end
 	local assignment = vim.fn.fnamemodify(filepath, ":t:r")
-	local cmd = ("typst watch --input %s %s %s\r\n"):format(
+	local cmd = ("typst watch --input %s --input %s %s %s\r\n"):format(
 		vim.fn.shellescape("assignment=" .. assignment),
+		vim.fn.shellescape("course=" .. dirname),
 		vim.fn.shellescape(filepath),
 		vim.fn.shellescape(output)
 	)
