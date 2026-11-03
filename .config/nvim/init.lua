@@ -378,30 +378,45 @@ local function carry_tasks()
 				and vim.api.nvim_buf_get_lines(buf, 0, -1, false)
 				or vim.fn.readfile(path)
 
-			local heading = "# Other tasks"
+			local heading = "# Loose tasks"
+			local heading_has_tasks = false
 			local changed = false
 
 			for i, line in ipairs(lines) do
-				heading = line:match("^%s*(#+%s+.+)$") or heading
+				local found_heading = line:match("^%s*(#+%s+.+)$")
+				local is_task = line:match("^%s*%- %[[^%]]%]")
+				local is_unfinished = line:match("^%s*%- %[%s%]")
 
-				if line:match("^%s*%- %[%s%]") then
-					if loaded and vim.bo[buf].modified then
-						vim.notify("Save the old note first: " .. path,
-							vim.log.levels.WARN)
-						return
+				if found_heading then
+					heading = found_heading
+					heading_has_tasks = false
+				elseif line:match("^%s*$") then
+					if heading_has_tasks then
+						heading = "# Loose tasks"
+						heading_has_tasks = false
 					end
+				elseif is_task then
+					heading_has_tasks = true
 
-					if not groups[heading] then
-						groups[heading] = {}
-						order[#order + 1] = heading
+					if is_unfinished then
+						if loaded and vim.bo[buf].modified then
+							vim.notify("Save the old note first: " .. path,
+								vim.log.levels.WARN)
+							return
+						end
+
+						if not groups[heading] then
+							groups[heading] = {}
+							order[#order + 1] = heading
+						end
+
+						groups[heading][#groups[heading] + 1] = line
+						lines[i] = line:gsub("%[ %]", "[>]", 1)
+							:gsub("%s+$", "") .. " (carried to " .. today .. ")"
+
+						count = count + 1
+						changed = true
 					end
-
-					groups[heading][#groups[heading] + 1] = line
-					lines[i] = line:gsub("%[ %]", "[>]", 1)
-						:gsub("%s+$", "") .. " (carried to " .. today .. ")"
-
-					count = count + 1
-					changed = true
 				end
 			end
 
