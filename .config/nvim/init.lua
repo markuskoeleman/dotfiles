@@ -141,7 +141,7 @@ vim.diagnostic.config({
 	virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
 })
 
-vim.cmd.colorscheme("github")
+vim.cmd.colorscheme("custom-theme")
 
 -- disable greying out unsused
 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", {})
