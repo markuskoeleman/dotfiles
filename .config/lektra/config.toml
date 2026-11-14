@@ -20,6 +20,7 @@ preview = 'u'
 
 [behavior]
 dont_invert_images = false
+invert_mode = true
 
 [window]
 bg = "#000000"

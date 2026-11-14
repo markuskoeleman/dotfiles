@@ -60,7 +60,6 @@ for i = 1, 9 do
 end
 
 vim.pack.add({
-	{ src = 'https://github.com/Saghen/blink.cmp',   version = vim.version.range('*') },
 	{ src = "https://github.com/nvim-mini/mini.nvim" },
 	{ src = "https://github.com/folke/flash.nvim" },
 })
@@ -86,20 +85,6 @@ require("mini.surround").setup({
 		suffix_next = 'n', -- Suffix to search with "next" method
 	},
 })
-require("blink.cmp").setup({
-	keymap = { preset = "default" },
-	appearance = {
-		nerd_font_variant = "mono",
-	},
-	signature = { enabled = true },
-	completion = {
-		list = {
-			selection = {
-				preselect = false, -- Allows me to avoid function placeholder argument snippets
-			},
-		},
-	},
-})
 require("flash").setup({
 	labels = "asdfghjklqwertyuiopzxcvbnm;",
 	highlight = {
@@ -117,6 +102,7 @@ require("flash").setup({
 		},
 	},
 })
+
 vim.lsp.enable({
 	"lua_ls",
 	"clangd",
@@ -140,6 +126,17 @@ vim.diagnostic.config({
 	},
 	virtual_text = { severity = { min = vim.diagnostic.severity.WARN } },
 })
+
+-- autocomplete
+vim.opt.complete:append("o")
+vim.opt.completeopt = {
+	"menuone",
+	"noselect",
+	"popup",
+	"fuzzy",
+}
+vim.opt.autocomplete = true
+
 
 vim.cmd.colorscheme("custom-theme")
 
