@@ -1,0 +1,9 @@
+[user]
+	email = markus.koeleman@gmail.com
+	name = Markus
+[core]
+	editor = nvim
+[init]
+	defaultBranch = main
+[alias]
+	ac = !git add -A && git commit -m
