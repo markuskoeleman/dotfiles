@@ -8,7 +8,7 @@ local fn = vim.fn
 local ns = api.nvim_create_namespace("personal_jump")
 
 local config = {
-	labels = "asdfghjklqwertyuiopzxcvbnm;1234567890",
+	labels = "asdfghjklqwertyuiopzxcvbnm;",
 	match_hl = "Search",
 	label_hl = "JumpLabel",
 }

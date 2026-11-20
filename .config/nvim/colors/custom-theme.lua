@@ -138,7 +138,6 @@ set({
 	},
 })
 
-
 -- Diagnostics
 set({
 	DiagnosticError          = { fg = palette.danger },

@@ -61,6 +61,7 @@ local todo = require("todos")
 
 vim.pack.add({
 	{ src = "https://github.com/nvim-mini/mini.nvim" },
+	{ src = "https://github.com/Julian/lean.nvim" },
 })
 require("mini.icons").setup()
 require("mini.pick").setup()
@@ -70,7 +71,7 @@ require("mini.surround").setup()
 require("mini.files").setup({
 	mappings = {
 		go_in_plus = "<CR>"
-	}
+	},
 })
 
 vim.lsp.enable({
@@ -136,7 +137,6 @@ map("n", "<leader>tp", function()
 	end
 end, { desc = "Typst Preview" })
 
--- map({ "n", "x", "o" }, "s", require("flash").jump)
 map({ "n", "x", "o" }, "f", jump.start, {
     desc = "Jump to text",
 })
